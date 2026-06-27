@@ -1,27 +1,39 @@
-# 🚀 OptimusAutomate Blog App
+# ⚡ OptimusAutomate Blog App
 
-A premium, full-stack, modern blog application designed with an immersive user interface, rich content editing, and robust security. Built using **React + Vite + Tailwind CSS** on the frontend, and **Node.js + Express + MongoDB** on the backend.
+<p align="center">
+  <img src="https://img.shields.io/badge/React-18.3-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React" />
+  <img src="https://img.shields.io/badge/Vite-5.4-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/Node.js-18+-339933?style=for-the-badge&logo=node.js&logoColor=white" alt="Node" />
+  <img src="https://img.shields.io/badge/Express-4.21-000000?style=for-the-badge&logo=express&logoColor=white" alt="Express" />
+  <img src="https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=for-the-badge&logo=mongodb&logoColor=white" alt="MongoDB" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="License" />
+</p>
 
 ---
 
-## ✨ Features
+**OptimusAutomate Blog App** is a premium, full-stack, modern blog application designed with an immersive user interface, rich content editing, and robust security. Built using **React + Vite + Tailwind CSS** on the frontend, and **Node.js + Express + MongoDB** on the backend.
+
+---
+
+## ✨ Key Features
 
 ### 🎨 Frontend Experience (Client)
-- **Glassmorphism & Rich Aesthetics**: Tailored modern UI using smooth gradients, curated color palettes, hover micro-animations, and full responsive design.
-- **Rich Text Editor**: Integrated **Tiptap Editor** with support for markdown shortcuts, link insertions, and dynamic image embeds.
-- **Interactive Engagement**:
-  - Like/Unlike system with real-time feedback.
+- **🎨 Glassmorphism & Rich Aesthetics**: Tailored modern UI using smooth gradients, curated color palettes, hover micro-animations, and full responsive design.
+- **📝 Rich Text Editor**: Integrated **Tiptap Editor** with support for markdown shortcuts, link insertions, and dynamic image embeds.
+- **💬 Interactive Engagement**:
+  - Like/Unlike system with real-time visual feedback.
   - Bookmark/Save articles to your personalized library.
-  - Hierarchical and interactive nested comments.
-- **State Management**: Lightweight, super-fast global state using **Zustand**.
-- **Data Fetching**: Optimistic updates, caching, and server-state sync via **TanStack React Query**.
-- **Toast Notifications**: Smooth visual cues using **React Hot Toast**.
+  - Hierarchical and interactive nested comment threads.
+- **⚡ State Management**: Lightweight, super-fast global state using **Zustand**.
+- **🔄 Data Fetching**: Optimistic updates, caching, and server-state sync via **TanStack React Query**.
+- **🔔 Toast Notifications**: Smooth visual cues using **React Hot Toast**.
 
 ### 🔒 Backend Architecture (Server)
-- **Robust Authentication**: JWT access tokens (short-lived) paired with secure, HTTP-only cookie-based refresh tokens (with rotation on reuse).
-- **Zod Schema Validation**: Strict verification of all incoming API payloads.
-- **Secure Image Uploads**: Direct streaming and hosting integration with **Cloudinary** using **Multer**.
-- **Advanced Security Measures**:
+- **🔑 Robust Authentication**: JWT access tokens (short-lived) paired with secure, HTTP-only cookie-based refresh tokens (with rotation on reuse).
+- **🛡️ Zod Schema Validation**: Strict verification of all incoming API payloads.
+- **☁️ Secure Image Uploads**: Direct streaming and hosting integration with **Cloudinary** using **Multer**.
+- **🛡️ Advanced Security Measures**:
   - **Helmet** for setting secure HTTP response headers.
   - **Express Rate Limit** to prevent brute-force attacks and abuse.
   - **Bcryptjs** for secure password hashing.
@@ -29,117 +41,168 @@ A premium, full-stack, modern blog application designed with an immersive user i
 
 ---
 
+## 🏗️ Architecture
+
+```mermaid
+graph TD
+    Client[React Frontend] <-->|HTTP Requests / JSON / HTTP-Only Cookies| Server[Express API Server]
+    Server <-->|Mongoose Queries| MongoDB[(MongoDB Atlas)]
+    Server <-->|Direct Image Uploads| Cloudinary[(Cloudinary Cloud Storage)]
+    Client -->|State Management| Zustand[Zustand Store]
+    Client -->|Data Fetching| ReactQuery[React Query]
+    Server -->|Security Middlewares| Helmet[Helmet / CORS / Rate Limiting]
+```
+
+---
+
 ## 🛠️ Technology Stack
 
-| Layer | Technologies Used |
-| :--- | :--- |
-| **Frontend** | React 18, Vite, Zustand, Tailwind CSS, React Router DOM, TanStack Query, Axios, Tiptap, Lucide Icons |
-| **Backend** | Node.js, Express, MongoDB (Mongoose ODM), JWT, Bcryptjs, Multer, Cloudinary, Zod, Slugify |
-| **Security** | Helmet, Express Rate Limit, HttpOnly Cookies, CORS Whitelist |
+### Frontend
+- **Framework**: [React.js](https://react.dev/) (v18) with [Vite](https://vite.dev/) (v5)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & Vanilla CSS variables
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Data Fetching & Cache**: [React Query](https://tanstack.com/query/latest)
+- **Rich Text Editor**: [Tiptap](https://tiptap.dev/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+### Backend
+- **Runtime**: [Node.js](https://nodejs.org/) (v18+)
+- **Framework**: [Express.js](https://expressjs.com/) (v4)
+- **Database Wrapper**: [Mongoose](https://mongoosejs.com/) (MongoDB)
+- **Validation**: [Zod](https://zod.dev/)
+- **Security**: [Helmet](https://helmetjs.github.io/), [CORS](https://github.com/expressjs/cors), [Express Rate Limit](https://github.com/express-rate-limit/express-rate-limit), [bcryptjs](https://github.com/dcodeIO/bcrypt.js)
+
+---
+
+## ⚙️ Quick Start
+
+### Prerequisites
+Make sure you have Node.js (v18+) and MongoDB installed on your system or use MongoDB Atlas.
+
+### 1. Server Configuration
+1. Navigate to the server directory:
+   ```bash
+   cd server
+   ```
+2. Copy the environment template and set up your variables:
+   ```bash
+   cp .env.example .env
+   ```
+3. Open `.env` and fill in the required fields:
+   *   `MONGODB_URI`: Your MongoDB connection string.
+   *   `JWT_SECRET` & `JWT_REFRESH_SECRET`: Secure cryptographic keys for authentication.
+   *   `CLIENT_URL`: `http://localhost:5173` (default client URL).
+   *   `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`: Your Cloudinary connection tokens.
+4. Install backend dependencies:
+   ```bash
+   npm install
+   ```
+5. Start the backend development server:
+   ```bash
+   npm run dev
+   ```
+
+### 2. Client Configuration
+1. Navigate to the client directory:
+   ```bash
+   cd ../client
+   ```
+2. Copy the environment template:
+   ```bash
+   cp .env.example .env
+   ```
+3. Configure the environment variable:
+   *   `VITE_API_URL`: `http://localhost:5000/api` (default server URL).
+4. Install frontend dependencies:
+   ```bash
+   npm install
+   ```
+5. Start the client development server:
+   ```bash
+   npm run dev
+   ```
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-OptimusAutomate_BlogApp/
-├── client/                 # Frontend React application (Vite)
+├── client/                     # React Frontend Application (Vite)
 │   ├── src/
-│   │   ├── components/     # UI, Auth, Layout, and Blog components
-│   │   ├── hooks/          # Custom react hooks (Auth, uploads, posts)
-│   │   ├── services/       # API call orchestrators (Axios instances)
-│   │   ├── store/          # Zustand global stores
-│   │   └── utils/          # Helpers (formatDate, readingTime)
-│   └── package.json
+│   │   ├── components/         # Layout, UI, Auth, and Blog components
+│   │   ├── hooks/              # Custom React hooks (Auth, Uploads, Posts)
+│   │   ├── pages/              # Main routing view pages (Home, Auth, Profile, settings, etc.)
+│   │   ├── services/           # Axios API services and theme management
+│   │   ├── store/              # Zustand global state stores (auth, bookmarks, theme)
+│   │   ├── utils/              # Utilities (formatDate, readingTime)
+│   │   └── App.jsx             # Main routing and layout configuration
+│   └── package.json            
 │
-└── server/                 # Backend REST API (Express)
+└── server/                     # Express Backend API Server
     ├── src/
-    │   ├── config/         # Database and Cloudinary configurations
-    │   ├── controllers/    # API controllers
-    │   ├── middleware/     # Auth, error, rate limiting, and validator middlewares
-    │   ├── models/         # Mongoose Schemas (User, Post, Comment)
-    │   └── routes/         # Express Router paths
-    └── package.json
+    │   ├── config/             # Database and Cloudinary configurations
+    │   ├── controllers/        # Route controllers containing business logic
+    │   ├── middleware/         # Auth, rate-limiter, validator, and error middlewares
+    │   ├── models/             # Mongoose schemas (User, Post, Comment)
+    │   └── routes/             # Express Route definitions
+    └── package.json            
 ```
 
 ---
 
-## ⚡ Getting Started
+## 🔌 API Routes Reference
 
-### 📋 Prerequisites
-- [Node.js](https://nodejs.org/) (v16+ recommended)
-- [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) database
-- [Cloudinary](https://cloudinary.com/) Account (for image uploads)
+### Authentication Routes
+*Endpoint prefix:* `/api/auth`
 
-### 🔧 Installation & Setup
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `POST` | `/register` | Register a new user | ❌ |
+| `POST` | `/login` | Log in and set HTTP-only token cookie | ❌ |
+| `POST` | `/logout` | Clear token cookie and log out user | ❌ |
+| `POST` | `/refresh` | Refresh expired JWT access token | ❌ |
+| `GET` | `/me` | Get current logged-in user profile details | ✔️ |
+| `PUT` | `/profile` | Update user bio, password, or avatar | ✔️ |
+| `GET` | `/authors` | Get list of top authors | ❌ |
+| `GET` | `/profile/:username`| Get a user profile by username | ❌ |
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/GrimReaper6526/OptimusAutomate_BlogApp.git
-   cd OptimusAutomate_BlogApp
-   ```
+### Blog Post Routes
+*Endpoint prefix:* `/api/posts`
 
-2. **Configure the Server**:
-   Navigate to the `server` folder, copy `.env.example` to `.env`, and fill in your credentials:
-   ```bash
-   cd server
-   cp .env.example .env
-   ```
-   *Required variables inside `server/.env`:*
-   ```ini
-   PORT=5000
-   NODE_ENV=development
-   CLIENT_URL=http://localhost:5173
-   MONGODB_URI=your_mongodb_connection_string
-   JWT_SECRET=your_jwt_access_secret
-   JWT_REFRESH_SECRET=your_jwt_refresh_secret
-   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-   CLOUDINARY_API_KEY=your_cloudinary_api_key
-   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-   ```
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `GET` | `/` | Retrieve all posts (supports drafts for auth) | ❌ / ✔️ |
+| `GET` | `/:slugOrId` | Get a specific blog post by slug or ID | ❌ / ✔️ |
+| `POST` | `/` | Create a new blog post | ✔️ |
+| `PUT` | `/:id` | Update an existing blog post | ✔️ |
+| `DELETE`| `/:id` | Delete a blog post | ✔️ |
+| `POST` | `/:id/like` | Toggle like/unlike on a post | ✔️ |
+| `POST` | `/upload` | Upload cover/inline images to Cloudinary | ✔️ |
 
-3. **Configure the Client**:
-   Navigate to the `client` folder, copy `.env.example` to `.env`:
-   ```bash
-   cd ../client
-   cp .env.example .env
-   ```
-   *Required variables inside `client/.env`:*
-   ```ini
-   VITE_API_URL=http://localhost:5000/api
-   ```
+### Comment Routes
+*Endpoint prefix:* `/api/comments`
 
-4. **Install Dependencies**:
-   Install packages for both the client and server:
-   ```bash
-   # From root:
-   cd server && npm install
-   cd ../client && npm install
-   ```
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :---: |
+| `GET` | `/:postId` | Retrieve comments for a specific post | ❌ |
+| `POST` | `/:postId` | Create a comment under a post | ✔️ |
+| `DELETE`| `/:id` | Delete a comment | ✔️ |
+| `POST` | `/:id/like` | Toggle like/unlike on a comment | ✔️ |
 
 ---
 
-## 🚀 Running Locally
+## 🛡️ Security Implementation Notes
 
-You will need to run the backend and frontend development servers concurrently:
+> [!IMPORTANT]
+> **Authentication Token Strategy**: OptimusAutomate Blog App implements secure cookie-based JWT authorization using HTTP-Only and SameSite configurations to mitigate Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF) vulnerabilities.
 
-### 1. Start Backend Server
-```bash
-cd server
-npm run dev
-```
-*The server will start on [http://localhost:5000](http://localhost:5000).*
+> [!TIP]
+> **Rate Limiting**: Rate limiters are actively configured on sensitive routes such as `/api/auth/register`, `/api/auth/login`, and `/api/posts/upload` to secure the system against brute-force attacks.
 
-### 2. Start Frontend App
-```bash
-cd client
-npm run dev
-```
-*The client will start on [http://localhost:5173](http://localhost:5173).*
+> [!WARNING]
+> **Helmet Integration**: Helmet HTTP headers are integrated out-of-the-box to prevent Clickjacking, MIME type sniffing, and secure user agent connections.
 
 ---
 
-## 🔒 Security Best Practices Implemented
-- **XSS Prevention**: HTML input from the rich text editor is strictly sanitized on both the frontend (using `dompurify`) and validated on the backend.
-- **CSRF Mitigation**: Refresh tokens are stored in `HttpOnly` and `SameSite` cookies, protecting them from unauthorized client-side access.
-- **API Rate Limiting**: Limiters protect endpoints (like login/register) against automated spam.
+## 📄 License
+Distributed under the MIT License. See `server/package.json` for license details.

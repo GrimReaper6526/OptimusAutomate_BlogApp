@@ -33,6 +33,7 @@ export default function Profile() {
         // Fetch user profile details directly
         const profileRes = await api.get(`/auth/profile/${username}`)
         setProfile(profileRes.data.user)
+        setIsFollowing(!!profileRes.data.user.isFollowing)
 
         // Fetch user posts separately
         try {
@@ -47,7 +48,7 @@ export default function Profile() {
         setLoading(false)
       }
     })()
-  }, [username])
+  }, [username, isAuthenticated])
 
   if (loading) {
     return (
@@ -71,9 +72,26 @@ export default function Profile() {
     )
   }
 
-  const handleFollow = () => {
-    setIsFollowing((prev) => !prev)
-    toast.success(isFollowing ? `Unfollowed @${username}` : `Following @${username}`)
+  const handleFollow = async () => {
+    if (!isAuthenticated) {
+      toast.error('Please log in to follow users')
+      navigate('/auth')
+      return
+    }
+    try {
+      const res = await api.post(`/auth/profile/${username}/follow`)
+      setIsFollowing(res.data.isFollowing)
+      setProfile(prev => ({
+        ...prev,
+        followers: res.data.isFollowing
+          ? [...(prev.followers || []), currentUser.id || currentUser._id]
+          : (prev.followers || []).filter(id => String(id) !== String(currentUser.id || currentUser._id)),
+        following: prev.following // keep following same
+      }))
+      toast.success(res.data.message)
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to update follow status')
+    }
   }
 
   const handleShare = () => {
@@ -155,11 +173,12 @@ export default function Profile() {
           </div>
 
           {/* Stats row */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-4 gap-3">
             {[
               { label: 'Articles', value: posts.length },
               { label: 'Total Likes', value: totalLikes },
-              { label: 'Following', value: isFollowing ? 1 : 0 },
+              { label: 'Followers', value: profile.followers?.length || 0 },
+              { label: 'Following', value: profile.following?.length || 0 },
             ].map((stat) => (
               <div
                 key={stat.label}

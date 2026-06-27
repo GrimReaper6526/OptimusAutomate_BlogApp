@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { z } from 'zod'
 import { validate } from '../middleware/validate.js'
-import { authenticate } from '../middleware/authMiddleware.js'
+import { authenticate, optionalAuth } from '../middleware/authMiddleware.js'
 import { authLimiter } from '../middleware/rateLimiter.js'
 import {
   register,
@@ -12,6 +12,7 @@ import {
   updateProfile,
   getProfileByUsername,
   getTopAuthors,
+  toggleFollow,
 } from '../controllers/authController.js'
 import { asyncHandler } from '../middleware/errorHandler.js'
 
@@ -54,4 +55,5 @@ authRoutes.post('/logout', asyncHandler(logout))
 authRoutes.get('/me', authenticate, asyncHandler(me))
 authRoutes.put('/profile', authenticate, validate(updateProfileSchema), asyncHandler(updateProfile))
 authRoutes.get('/authors', asyncHandler(getTopAuthors))
-authRoutes.get('/profile/:username', asyncHandler(getProfileByUsername))
+authRoutes.get('/profile/:username', optionalAuth, asyncHandler(getProfileByUsername))
+authRoutes.post('/profile/:username/follow', authenticate, asyncHandler(toggleFollow))

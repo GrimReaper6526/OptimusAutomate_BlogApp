@@ -43,6 +43,8 @@ function publicUser(user) {
     avatar: user.avatar,
     bio: user.bio,
     role: user.role,
+    followers: user.followers || [],
+    following: user.following || [],
     createdAt: user.createdAt,
   }
 }
@@ -200,12 +202,21 @@ export async function getProfileByUsername(req, res) {
   const username = String(req.params.username)
   const user = await User.findOne({ username: { $regex: new RegExp(`^${username}$`, 'i') } })
   if (!user) throw new AppError('User not found', 404)
+
+  const currentUserId = req.user?.userId
+  const isFollowing = currentUserId
+    ? user.followers.some(id => String(id) === String(currentUserId))
+    : false
+
   res.json({
     user: {
       _id: user._id,
       username: user.username,
       avatar: user.avatar,
       bio: user.bio,
+      followers: user.followers || [],
+      following: user.following || [],
+      isFollowing,
       createdAt: user.createdAt,
     },
   })
@@ -277,4 +288,39 @@ export async function getTopAuthors(req, res) {
   }
 
   res.json({ authors });
+}
+
+/* -------------------- Toggle Follow/Unfollow ------------------ */
+export async function toggleFollow(req, res) {
+  const targetUsername = String(req.params.username)
+  const currentUserId = req.user.userId
+
+  const targetUser = await User.findOne({ username: { $regex: new RegExp(`^${targetUsername}$`, 'i') } })
+  if (!targetUser) throw new AppError('User to follow not found', 404)
+
+  if (String(targetUser._id) === String(currentUserId)) {
+    throw new AppError('You cannot follow yourself', 400)
+  }
+
+  const isFollowing = targetUser.followers.some(id => String(id) === String(currentUserId))
+
+  if (isFollowing) {
+    // Atomic unfollow using $pull
+    await User.findByIdAndUpdate(targetUser._id, { $pull: { followers: currentUserId } })
+    await User.findByIdAndUpdate(currentUserId, { $pull: { following: targetUser._id } })
+  } else {
+    // Atomic follow using $addToSet (ensures uniqueness!)
+    await User.findByIdAndUpdate(targetUser._id, { $addToSet: { followers: currentUserId } })
+    await User.findByIdAndUpdate(currentUserId, { $addToSet: { following: targetUser._id } })
+  }
+
+  // Fetch updated target user to get the latest followers/following arrays
+  const updatedTarget = await User.findById(targetUser._id).lean()
+
+  res.json({
+    message: isFollowing ? `Unfollowed @${targetUser.username}` : `Following @${targetUser.username}`,
+    isFollowing: !isFollowing,
+    followersCount: updatedTarget.followers?.length || 0,
+    followingCount: updatedTarget.following?.length || 0,
+  })
 }
